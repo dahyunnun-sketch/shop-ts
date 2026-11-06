@@ -14,7 +14,7 @@ const initialForm: SignUpForm = {
 const SignUp = () => {
     const [form, setForm] = useState<SignUpForm>(initialForm);
     const [error, setError] = useState<string | null>(null);
-    const { users, signup } = useUser(); // Context API의 사용자 훅 ??
+    const { signup } = useUser();  //Context API의 사용자 훅 사용
 
     // 폼에 입력된 데이터 가져오기
     const { username, password, passwordConfirm, name, email } = form;
@@ -28,9 +28,9 @@ const SignUp = () => {
 
     // 폼 제출 핸들러
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault(); // 기본 동작 막기
+        e.preventDefault();  //기본 동작 막기
 
-       // 유효성 검사
+        // 유효성 검사
         if(!username){
             setError("아이디를 입력하세요");
             return;
@@ -40,18 +40,17 @@ const SignUp = () => {
             return;
         }
         if(password !== passwordConfirm){
-            setError("비밀번호를 한 번 더 확인하세요");
+            setError("비밀번호가 일치하지 않습니다.");
             return;
         }
-        if(!name){
+        if(!name.trim()){
             setError("이름을 입력하세요");
             return;
         }
         if(!email){
-            setError("이메일을 입력하세요");
+            setError("이메일 입력하세요");
             return;
         }
-
 
         // 회원 가입 함수 호출
         signup({
@@ -61,8 +60,8 @@ const SignUp = () => {
             email: email.trim(),
             role: "user"
         });
-        alert("회원가입이 완료되었습니다. 로그인 해주세요.");
-        navigate('/'); // 로그인 페이지로 이동
+        alert("회원가입이 완료되었습니다. 로그인 해주세요");
+        navigate('/'); //로그인 페이지로 이동
     }
 
     return(
@@ -70,63 +69,63 @@ const SignUp = () => {
             <h2>회원 가입</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="username">ID</label>
+                    <label htmlFor="username">아이디</label>
                     <input 
-                        type="text"
+                        type="text" 
                         id="username"
                         name="username"
                         value={username}
                         onChange={handleInputChange}
-                        placeholder="아이디를 입력하세요."
+                        placeholder="아이디를 입력해주세요"
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">password</label>
+                    <label htmlFor="password">비밀번호</label>
                     <input 
-                        type="password"
+                        type="password" 
                         id="password"
                         name="password"
                         value={password}
                         onChange={handleInputChange}
-                        placeholder="비밀번호를 입력하세요."
+                        placeholder="비밀번호를 입력해주세요"
                     />
                 </div>
                 <div>
-                    <label htmlFor="passwordConfirm">password confirm</label>
+                    <label htmlFor="passwordConfirm">비밀번호 확인</label>
                     <input 
-                        type="password"
+                        type="password" 
                         id="passwordConfirm"
                         name="passwordConfirm"
                         value={passwordConfirm}
                         onChange={handleInputChange}
-                        placeholder="비밀번호를 한 번 더 입력하세요."
+                        placeholder="비밀번호를 한 번 더 입력해주세요"
                     />
                 </div>
                 <div>
-                    <label htmlFor="name">name</label>
+                    <label htmlFor="name">이름</label>
                     <input 
-                        type="text"
+                        type="text" 
                         id="name"
                         name="name"
                         value={name}
                         onChange={handleInputChange}
-                        placeholder="이름을 입력하세요."
+                        placeholder="이름을 입력해주세요"
                     />
                 </div>
                 <div>
-                    <label htmlFor="email">email</label>
+                    <label htmlFor="email">이메일</label>
                     <input 
-                        type="email"
+                        type="email" 
                         id="email"
                         name="email"
                         value={email}
                         onChange={handleInputChange}
-                        placeholder="이메일을 입력하세요."
+                        placeholder="이메일을 입력해주세요"
                     />
                 </div>
                 {error && 
                     <p className="sign-up_error">{error}</p>}
-                <button type="submit">회원 가입 등록</button>
+                <button type="submit">등록</button>
             </form>
         </div>
     )
