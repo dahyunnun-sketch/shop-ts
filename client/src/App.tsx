@@ -11,6 +11,8 @@ import UserProvider from './context/UserProvider'
 import SignUp from './users/SignUp'
 import SignIn from './users/SignIn'
 import AdminPage from './users/AdminPage'
+import EditProduct from './products/EditProduct'
+import MyPage from './users/MyPage'
 
 function App() {
 
@@ -25,12 +27,16 @@ function App() {
             <Header />
             <main>
               <Routes>
+                {/* 상품 */}
                 <Route path='/' element={<ProductList />} />
                 <Route path='/product/:id' element={<ProductDetail />} />
                 <Route path='/product/new' element={<AddProduct />} />
+                <Route path='/product/:id/edit' element={<EditProduct />} />
                 <Route path='/cart' element={<Cart />} />
+                {/* 회원 */}
                 <Route path='/signup' element={<SignUp />} />
                 <Route path='/signin' element={<SignIn />} />
+                <Route path='/mypage' element={<MyPage />} />
                 <Route path='/admin' element={<AdminPage />} />
               </Routes>
             </main>

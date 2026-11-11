@@ -1,13 +1,19 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useProduct } from "../context/ProductContext";
 import { useCart } from "../context/CartContext";
+import { useUser } from "../context/UserContext";
 
 const NO_IMAGE = "/images/no-image.png"
 // 상품 상세보기 컴포넌트
 const ProductDetail = () => {
     const {id} = useParams<{id: string}>();
-    const {products} = useProduct();
+    const {products, removeProduct} = useProduct();
     const {addToCart} = useCart();
+    const {currentUser} = useUser();
+    const navigate = useNavigate();
+
+    // 관리자 인증
+    const isAdmin = currentUser?.role === "admin";
 
     // find() 로 해당 id와 일치하는 상품 찾기
     // product/3  - 3이 문자이므로 숫자로 형변환
@@ -15,6 +21,19 @@ const ProductDetail = () => {
 
     if(!product){
         return <div>상품을 찾을 수 없습니다.</div>
+    }
+
+    // 상품 삭제 핸들러
+    const handleDelete = async () => {
+        if(!window.confirm("정말로 상품을 삭제할까요 ?"))
+            return;
+        try {
+            await removeProduct(product.id); // 삭제 함수 호출
+            alert("상품이 삭제되었습니다.");
+            navigate('/') // 상품 목록
+        } catch {
+            alert("상품 삭제 중 오류가 발생했습니다.")
+        }
     }
 
     return(
@@ -36,9 +55,23 @@ const ProductDetail = () => {
             <button 
                 className="product-detail_cart"
                 onClick={() => {
+                    if(!currentUser){
+                        alert("로그인이 필요합니다.");
+                        navigate('/signin');
+                        return;
+                    }
                     addToCart(product.id, 1);
                     alert("상품이 장바구니에 담겼습니다.")
                 }}>담기</button>
+                {/* 권한 관리자는 보이고 회원은 보이지 않는 수정, 삭제 기능 */}
+                {isAdmin && (
+                    <div className="product-detail_admin">
+                    <Link 
+                        to={`/product/${product.id}/edit`} 
+                        className="product-detail_edit"
+                    >수정</Link>
+                    <button className="product-detail_delete" onClick={handleDelete}>삭제</button>
+                </div>)}
         </div>
     )
 }
