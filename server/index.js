@@ -227,7 +227,11 @@ app.post("/api/users/logout", (req, res) => {
 })
 
 // 회원 정보 변경(이름, 이메일)
-app.put("/api/users/:id", async (req,res) => {
+app.put("/api/users/:id", requireLogin, async (req,res) => {
+    if(req.session.user.id !== Number(req.params.id)){
+        return res.status(403).send("본인 정보만 수정할 수 있습니다.")
+    }
+
     const uid = req.params.id;
     const { name, email } = req.body;
 
