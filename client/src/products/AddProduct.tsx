@@ -8,7 +8,8 @@ const initialForm: ProductForm = {
     pName: "",
     category: "마우스",
     price: 0,
-    description: ""
+    description: "",
+    image: ""
 }
 
 const AddProduct = () => {
@@ -18,7 +19,7 @@ const AddProduct = () => {
     const navigate = useNavigate();
 
     // 폼에 입력된 데이터 가져오기
-    const { pName, category, price, description } = form;
+    const { pName, category, price, description, image } = form;
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -27,7 +28,7 @@ const AddProduct = () => {
     }
 
     //  폼 제출 핸들러
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         // 유효성 검사
@@ -45,14 +46,19 @@ const AddProduct = () => {
         }
 
         // 상품 추가 함수 호출
-        addProduct({
-            pName,
-            category,
-            price: Number(price),  //화면에 입력한 가격은 문자형이므로 숫자형변환
-            description
-        });
-        alert("상품이 등록되었습니다.");
-        navigate('/');  //상품 목록으로 이동
+        try{
+            await addProduct({
+                pName,
+                category,
+                price: Number(price),  //화면에 입력한 가격은 문자형이므로 숫자형변환
+                description,
+                image: image || undefined
+            });
+            alert("상품이 등록되었습니다.");
+            navigate('/');  //상품 목록으로 이동
+        }catch{
+            setError("상품 등록중 오류가 발생했습니다.");
+        }
     }
 
     // 취소 버튼 - 폼 초기화
@@ -111,6 +117,22 @@ const AddProduct = () => {
                         rows={4}
                     />
                 </div>
+                <div>
+                    <label htmlFor="image">이미지:</label>
+                    <select
+                        id="image"
+                        name="image"
+                        value={image}
+                        onChange={handleChange}
+                    >
+                        <option value="">선택 안 함</option>
+                        <option value="/images/mouse.png">마우스</option>
+                        <option value="/images/keyboard.png">키보드</option>
+                        <option value="/images/monitor.png">모니터</option>
+                        <option value="/images/usb-hub.png">USB-C 허브</option>
+                        <option value="/images/webcam.png">웹캠</option>
+                    </select>
+                    </div>
                 {error && 
                     <p className="product-add_error">{error}</p>}
                 <div className="product-add_buttons">

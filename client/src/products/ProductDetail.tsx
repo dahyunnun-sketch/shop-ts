@@ -9,7 +9,7 @@ const ProductDetail = () => {
     const {id} = useParams<{id: string}>();
     const {products, removeProduct} = useProduct();
     const {addToCart} = useCart();
-    const {currentUser} = useUser();
+    const { currentUser } = useUser();
     const navigate = useNavigate();
 
     // 관리자 인증
@@ -25,14 +25,13 @@ const ProductDetail = () => {
 
     // 상품 삭제 핸들러
     const handleDelete = async () => {
-        if(!window.confirm("정말로 상품을 삭제할까요 ?"))
-            return;
-        try {
+        if(!window.confirm("정말로 상품을 삭제할까요?")) return;
+        try{
             await removeProduct(product.id); // 삭제 함수 호출
             alert("상품이 삭제되었습니다.");
-            navigate('/') // 상품 목록
-        } catch {
-            alert("상품 삭제 중 오류가 발생했습니다.")
+            navigate('/'); // 상품 목록
+        }catch{
+            alert("상품 삭제 중 오류가 발생했습니다.");
         }
     }
 
@@ -63,15 +62,20 @@ const ProductDetail = () => {
                     addToCart(product.id, 1);
                     alert("상품이 장바구니에 담겼습니다.")
                 }}>담기</button>
-                {/* 권한 관리자는 보이고 회원은 보이지 않는 수정, 삭제 기능 */}
+                {/* 수정, 삭제-권한 관리자는 보이고, 회원은 보이지 않음 기능 */}
                 {isAdmin && (
                     <div className="product-detail_admin">
-                    <Link 
-                        to={`/product/${product.id}/edit`} 
-                        className="product-detail_edit"
-                    >수정</Link>
-                    <button className="product-detail_delete" onClick={handleDelete}>삭제</button>
-                </div>)}
+                        <Link 
+                            to={`/product/${product.id}/edit`} 
+                            className="product-detail_edit"
+                        >
+                        수정
+                        </Link>
+                        <button 
+                            className="product-detail_delete"
+                            onClick={handleDelete}
+                        >삭제</button>
+                    </div>)}
         </div>
     )
 }

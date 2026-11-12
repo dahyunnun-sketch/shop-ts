@@ -20,10 +20,10 @@ const Header = () => {
         }
     }
 
-    // 로그아웃 시 장바구니 비우기
-    const handleLogout = () => {
+    // 로그아웃시 장바구니 비우기
+    const handleLogout = async () => {
+        await logout();
         clearCart();
-        logout();
         navigate('/'); // 상품 목록 페이지 이동
     }
 

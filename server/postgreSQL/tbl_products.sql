@@ -19,5 +19,6 @@ INSERT INTO products (p_name, category, price, description, image) VALUES
 -- 전체 조회
 SELECT * FROM products;
 
-
+-- 테이블 삭제
+DROP TABLE products;
 

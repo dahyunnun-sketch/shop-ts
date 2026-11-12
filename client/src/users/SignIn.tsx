@@ -22,7 +22,7 @@ const SignIn = () => {
         setForm({...form, [name]: value})
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();  //기본 동작 막기
 
         // 유효성 검사
@@ -36,13 +36,18 @@ const SignIn = () => {
         }
 
         // 로그인 함수 호출
-        const success = login({username, password});
-        if(!success){
-            setError("아이디 또는 비밀번호가 일치하지 않습니다.");
-            return;
+        try{
+            const success = await login({username: username.trim(), password});
+            if(!success){
+                setError("아이디 또는 비밀번호가 일치하지 않습니다.");
+                return;
+            }
+            alert("로그인되었습니다.");
+            navigate('/');
+        }catch{
+            setError("로그인 중 오류가 발생했습니다.")
         }
-        alert("로그인되었습니다.");
-        navigate('/');
+        
     }
 
     return(
@@ -71,8 +76,7 @@ const SignIn = () => {
                         placeholder="비밀번호를 입력해주세요"
                     />
                 </div>
-                {error && 
-                    <p className="sign-up_error">{error}</p>}
+                {error && <p className="sign-up_error">{error}</p>}
                 <button type="submit">로그인</button>
             </form>
 

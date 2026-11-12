@@ -8,7 +8,7 @@ const NO_IMAGE = "/images/no-image.png";  //이미지가 없는 경우 저장값
 
 const ProductCard = ({product}: {product: Product}) => {
     const { addToCart } = useCart();
-    const { currentUser } = useUser(); // 로그인한 회원
+    const { currentUser } = useUser();  //로그인한 회원
     const navigate = useNavigate();
 
     return(
